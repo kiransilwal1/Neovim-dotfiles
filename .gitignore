@@ -1,4 +1,9 @@
 .android
+swiftpm
+tool_state
+../.gitignore
+vscode-js-debug
+
 
 # Compiled Lua sources
 luac.out
