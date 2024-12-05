@@ -16,7 +16,10 @@ return {
         port = "${port}",
         executable = {
           command = "node",
-          args = { "/Users/kiransilwal/.local/share/nvim/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js", "${port}" },
+          args = {
+            "/Users/kiransilwal/.local/share/nvim/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js",
+            "${port}",
+          },
         },
       }
 
@@ -24,7 +27,7 @@ return {
       dap.adapters["chrome"] = {
         type = "executable",
         command = "node",
-        args = { "/Users/kiransilwal/.local/share/nvim/mason/packages/vscode-chrome-debug/out/src/chromeDebug.js" },
+        args = { "/Users/kiransilwal/.local/share/nvim/mason/packages/chrome-debug-adapter/out/src/chromeDebug.js" },
       }
 
       -- Configure languages
@@ -35,7 +38,6 @@ return {
             name = "Next.js: debug server-side",
             type = "pwa-node",
             request = "attach",
-            port = 9231,
             skipFiles = { "<node_internals>/**", "node_modules/**" },
             cwd = "${workspaceFolder}",
             runtimeExecutable = "node",
@@ -69,4 +71,3 @@ return {
     end,
   },
 }
-
