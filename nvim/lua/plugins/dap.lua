@@ -2,12 +2,9 @@ return {
   -- Add nvim-dap
   {
     "mfussenegger/nvim-dap",
-    dependencies = {
-      { "rcarriga/nvim-dap-ui", config = true }, -- UI for nvim-dap
-      { "theHamsta/nvim-dap-virtual-text", config = true }, -- Virtual text support
-    },
     config = function()
       local dap = require("dap")
+      dap.set_log_level("DEBUG")
 
       -- Define `pwa-node` adapter
       dap.adapters["pwa-node"] = {
@@ -34,12 +31,26 @@ return {
       local js_based_languages = { "javascript", "typescript", "javascriptreact", "typescriptreact" }
       for _, language in ipairs(js_based_languages) do
         dap.configurations[language] = {
+
           {
             name = "Next.js: debug server-side",
             type = "pwa-node",
             request = "attach",
+            url = "https://localhost:3000",
             skipFiles = { "<node_internals>/**", "node_modules/**" },
+            webRoot = vim.fn.getcwd(),
+            runtimeExecutable = "node",
+            sourceMaps = true,
+          },
+          {
+            type = "pwa-node",
+            request = "attach",
+            name = "Attach",
+            processId = require("dap.utils").pick_process,
             cwd = "${workspaceFolder}",
+            url = "https://localhost:3000",
+            skipFiles = { "<node_internals>/**", "node_modules/**" },
+            webRoot = vim.fn.getcwd(),
             runtimeExecutable = "node",
             sourceMaps = true,
           },
@@ -62,12 +73,8 @@ return {
   -- Optional: Additional plugins
   {
     "theHamsta/nvim-dap-virtual-text", -- Virtual text
-    config = true,
-  },
-  {
-    "rcarriga/nvim-dap-ui", -- UI for nvim-dap
-    config = function()
-      require("dapui").setup()
-    end,
+    opts = {
+      virt_text_win_col = 80,
+    },
   },
 }
