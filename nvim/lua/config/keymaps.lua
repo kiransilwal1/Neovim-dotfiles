@@ -37,6 +37,7 @@ keymap.set("n", "<M-l>", '<Cmd>lua require("tmux").resize_right()<CR>', { silent
 
 keymap.set("n", "<leader>xr", "<cmd>.lua<CR>", { desc = "Execute the current line" })
 keymap.set("n", "<leader>xf", "<cmd>source %<CR>", { desc = "Execute the current file" })
+keymap.set("n", "<leader>1", "<cmd>Inspect<CR>", { desc = "Inspect color properties" })
 
 local set_keymap = vim.api.nvim_set_keymap
 
