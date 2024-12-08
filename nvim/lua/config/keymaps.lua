@@ -37,7 +37,7 @@ keymap.set("n", "<M-l>", '<Cmd>lua require("tmux").resize_right()<CR>', { silent
 
 keymap.set("n", "<leader>xr", "<cmd>.lua<CR>", { desc = "Execute the current line" })
 keymap.set("n", "<leader>xf", "<cmd>source %<CR>", { desc = "Execute the current file" })
-keymap.set("n", "<leader>1", "<cmd>Inspect<CR>", { desc = "Inspect color properties" })
+keymap.set("n", "<leader>1", "<cmd>Inspect<CR>", { desc = "Execute the current file" })
 
 local set_keymap = vim.api.nvim_set_keymap
 
@@ -48,8 +48,11 @@ local set_keymap = vim.api.nvim_set_keymap
 -- keymap.set("n", "<M-s>", "<C-W>-")
 
 -- Split windows
-keymap.set("n", "ss", ":vsplit<Return>", opts)
+keymap.set("n", "sh", ":vsplit<Return>", opts)
 keymap.set("n", "sv", ":split<Return>", opts)
+keymap.set("n", "ss", ":w<Return>", opts)
+keymap.set("n", "ssq", ":wq<Return>", opts)
+keymap.set("n", "qa", ":qa<Return>", opts)
 
 -- Tabs
 keymap.set("n", "te", ":tabedit", opts)
