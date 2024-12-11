@@ -38,7 +38,6 @@ return {
       end,
     },
   },
-  -- filename
   {
     "b0o/incline.nvim",
     event = "BufReadPre",
@@ -78,4 +77,5 @@ return {
       },
     },
   },
+  { "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" } },
 }

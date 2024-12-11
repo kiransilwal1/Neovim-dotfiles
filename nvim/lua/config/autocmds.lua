@@ -121,43 +121,43 @@ autocmd("FileType", {
   desc = "Set shiftwidth to 4 in these filetypes",
 })
 
-local ns_id = vim.api.nvim_create_namespace("autosave")
-
-vim.api.nvim_create_autocmd({ "FocusLost", "BufLeave", "BufWinLeave", "InsertLeave" }, {
-  callback = function()
-    -- Only save if the buffer is modified and not a help file
-    if vim.bo.filetype ~= "" and vim.bo.buftype == "" and vim.bo.modified and vim.bo.filetype ~= "help" then
-      -- Get the current cursor position (1-based index)
-      local cursor_pos = vim.api.nvim_win_get_cursor(0)
-      local row, col = cursor_pos[1] - 1, cursor_pos[2] -- Convert to 0-based index
-
-      -- Create a namespace for the virtual text
-      local ns_id = vim.api.nvim_create_namespace("autosave")
-
-      -- Set virtual text near the cursor position
-      vim.api.nvim_buf_set_extmark(0, ns_id, row, col, {
-        virt_text = { { "💾", "Comment" } },
-        virt_text_pos = "overlay", -- Overlay the text on top of the current line
-        hl_mode = "combine", -- Combine with the background color
-        -- Optional settings to ensure the text is visible even at the screen's edge
-        virt_text_win_col = col + 1, -- Move text slightly to the right of the cursor (can adjust as needed)
-      })
-
-      -- Trigger LSP formatting before saving
-      vim.lsp.buf.format({ async = false })
-
-      -- Perform the save
-      vim.cmd("silent! nested w")
-
-      -- Clear the virtual text after a short delay (e.g., 300ms)
-      vim.defer_fn(function()
-        vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
-      end, 300) -- 300ms delay (adjust as needed)
-    end
-  end,
-  nested = true,
-  desc = "Auto Save with LSP Formatting and Loading Icon",
-})
+-- local ns_id = vim.api.nvim_create_namespace("autosave")
+--
+-- vim.api.nvim_create_autocmd({ "FocusLost", "BufLeave", "BufWinLeave", "InsertLeave" }, {
+--   callback = function()
+--     -- Only save if the buffer is modified and not a help file
+--     if vim.bo.filetype ~= "" and vim.bo.buftype == "" and vim.bo.modified and vim.bo.filetype ~= "help" then
+--       -- Get the current cursor position (1-based index)
+--       local cursor_pos = vim.api.nvim_win_get_cursor(0)
+--       local row, col = cursor_pos[1] - 1, cursor_pos[2] -- Convert to 0-based index
+--
+--       -- Create a namespace for the virtual text
+--       local ns_id = vim.api.nvim_create_namespace("autosave")
+--
+--       -- Set virtual text near the cursor position
+--       vim.api.nvim_buf_set_extmark(0, ns_id, row, col, {
+--         virt_text = { { "💾", "Comment" } },
+--         virt_text_pos = "overlay", -- Overlay the text on top of the current line
+--         hl_mode = "combine", -- Combine with the background color
+--         -- Optional settings to ensure the text is visible even at the screen's edge
+--         virt_text_win_col = col + 1, -- Move text slightly to the right of the cursor (can adjust as needed)
+--       })
+--
+--       -- Trigger LSP formatting before saving
+--       -- vim.lsp.buf.format({ async = false })
+--
+--       -- Perform the save
+--       vim.cmd("silent! nested w")
+--
+--       -- Clear the virtual text after a short delay (e.g., 300ms)
+--       vim.defer_fn(function()
+--         vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
+--       end, 300) -- 300ms delay (adjust as needed)
+--     end
+--   end,
+--   nested = true,
+--   desc = "Auto Save with LSP Formatting and Loading Icon",
+-- })
 
 autocmd("FocusGained", {
   callback = function()

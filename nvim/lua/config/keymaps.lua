@@ -12,6 +12,10 @@ keymap.set("n", "<C-l>", "<Cmd>NvimTmuxNavigateRight<CR>", { silent = true })
 keymap.set("n", "<C-\\>", "<Cmd>NvimTmuxNavigateLastActive<CR>", { silent = true })
 keymap.set("n", "<C-Space>", "<Cmd>NvimTmuxNavigateNavigateNext<CR>", { silent = true })
 keymap.set("i", "jj", "<ESC>", { desc = "Exit insert mode with jk" })
+keymap.set("n", "ff", ":ZenMode<Return>", { desc = "Exit insert mode with jk" })
+
+-- Jump to next diagnostic
+keymap.set("n", "ge", "<Cmd>lua vim.diagnostic.goto_next()<CR>", { desc = "Go to next diagnostic" })
 
 -- Borderless terminal
 vim.keymap.set("n", "<C-/>", function()

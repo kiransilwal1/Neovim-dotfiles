@@ -3,9 +3,13 @@ return {
     "folke/zen-mode.nvim",
     opts = {
       window = {
-        width = 120,
+        width = 0.9,
       },
       plugins = {
+        kitty = {
+          enabled = true,
+          font = "+4", -- font size increment
+        },
         options = {
           laststatus = 0,
         },
