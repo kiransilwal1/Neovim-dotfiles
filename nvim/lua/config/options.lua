@@ -26,7 +26,26 @@ vim.api.nvim_set_hl(0, "@function", { link = "FunctionReturn" }) -- Functions
 vim.api.nvim_set_hl(0, "@keyword.return", { link = "FunctionReturn" }) -- Return keywords
 vim.api.nvim_set_hl(0, "@type", { link = "TypeDefinition" }) -- Classes/Types
 vim.api.nvim_set_hl(0, "@type.definition", { link = "TypeDefinition" }) -- Type definitions
-
+--
+-- vim.fn.sign_define("DapBreakpoint", {})
+-- vim.fn.sign_define("DapStopped", {})
+--
+-- -- Define custom signs for DAP
+-- vim.fn.sign_define(
+--   "DapBreakpoint",
+--   { text = "🛑", texthl = "DapBreakpoint", linehl = "DapBreakpointLine", numhl = "DapBreakpointLine" }
+-- )
+-- vim.fn.sign_define(
+--   "DapStopped",
+--   { text = "➡️", texthl = "DapStopped", linehl = "DapStoppedLine", numhl = "DapStoppedLine" }
+-- )
+--
+-- -- Highlight groups
+-- vim.api.nvim_set_hl(0, "DapBreakpoint", { fg = "#e06c75", bg = "NONE", bold = true })
+-- vim.api.nvim_set_hl(0, "DapBreakpointLine", { bg = "#ffbd5e" }) -- Line highlight for breakpoints
+-- vim.api.nvim_set_hl(0, "DapStopped", { fg = "#98c379", bg = "NONE", bold = true })
+-- vim.api.nvim_set_hl(0, "DapStoppedLine", { bg = "#ffbd5e" }) -- Line highlight for stopped execution
+--
 -- vim.api.nvim_set_hl(0, "@keyword.return.tsx", { bold = true, italic = true, fg = "#ffbd5e" })
 
 --
@@ -34,7 +53,7 @@ vim.api.nvim_set_hl(0, "@type.definition", { link = "TypeDefinition" }) -- Type 
 --
 -- vim.api.nvim_set_hl(0, "DapStoppedSymbol", { fg = colors.green, bg = colors.bg1 })
 --
-vim.api.nvim_set_hl(0, "DapUIBreakpointsCurrentLine", { fg = "#ffbd5e" })
+-- vim.api.nvim_set_hl(0, "DapUIBreakpointsCurrentLine", { fg = "#ffbd5e" })
 --
 -- vim.api.nvim_set_hl(0, "DapUIBreakpointsDisabledLine", { fg = colors.gray })
 --

@@ -2,7 +2,7 @@ return {
   "mfussenegger/nvim-dap",
   dependencies = {
     "rcarriga/nvim-dap-ui",
-    lazy = true,
+    lazy = false,
     dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
     opts = {
       layouts = {
@@ -26,7 +26,7 @@ return {
         },
       },
     },
-    config = function(_, opts) -- 👈 here, the _
+    config = function(_, opts)
       require("dapui").setup(opts)
 
       local listener = require("dap").listeners
@@ -46,19 +46,38 @@ return {
     local dap = require("dap")
     dap.set_log_level("DEBUG")
 
-    -- Define `pwa-node` adapter
-    -- dap.adapters["pwa-node"] = {
-    --   type = "server",
-    --   host = "localhost",
-    --   port = "${port}",
-    --   executable = {
-    --     command = "node",
-    --     args = {
-    --       "/Users/kiransilwal/.local/share/nvim/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js",
-    --       "${port}",
-    --     },
-    --   },
-    -- }
+    -- Define custom signs
+    vim.fn.sign_define(
+      "DapBreakpoint",
+      { text = "🛑", texthl = "DapBreakpoint", linehl = "DapBreakpointLine", numhl = "DapBreakpointLine" }
+    )
+    vim.fn.sign_define(
+      "DapStopped",
+      { text = "➡️", texthl = "DapStopped", linehl = "DapStoppedLine", numhl = "DapStoppedLine" }
+    )
+
+    -- Clear and redefine signs on VimEnter to prevent conflicts
+    vim.api.nvim_create_autocmd("VimEnter", {
+      callback = function()
+        vim.fn.sign_define("DapBreakpoint", { text = "" })
+        vim.fn.sign_define("DapStopped", { text = "" })
+        vim.fn.sign_define(
+          "DapBreakpoint",
+          { text = "🛑", texthl = "DapBreakpoint", linehl = "DapBreakpointLine", numhl = "DapBreakpointLine" }
+        )
+        vim.fn.sign_define(
+          "DapStopped",
+          { text = "➡️", texthl = "DapStopped", linehl = "DapStoppedLine", numhl = "DapStoppedLine" }
+        )
+      end,
+    })
+
+    vim.api.nvim_set_hl(0, "DapBreakpoint", { fg = "#e06c75", bg = "NONE", bold = true })
+    vim.api.nvim_set_hl(0, "DapBreakpointLine", { bg = "#424242" }) -- Line highlight for breakpoints
+    vim.api.nvim_set_hl(0, "DapStopped", { fg = "#98c379", bg = "NONE", bold = true })
+    vim.api.nvim_set_hl(0, "DapStoppedLine", { bg = "#424242" }) -- Line highlight for stopped execution
+
+    -- Adapter configurations
     dap.adapters["pwa-node"] = {
       type = "server",
       host = "localhost",
@@ -71,7 +90,6 @@ return {
         },
       },
     }
-    -- Define `chrome` adapter
     dap.adapters["chrome"] = {
       type = "executable",
       command = "node",
@@ -79,18 +97,16 @@ return {
     }
     dap.adapters.dart = {
       type = "executable",
-      command = "/Users/kiransilwal/Development/flutter/bin/dart", -- if you're using fvm, you'll need to provide the full path to dart (dart.exe for windows users), or you could prepend the fvm command
+      command = "/Users/kiransilwal/Development/flutter/bin/dart",
       args = { "debug_adapter" },
-      -- windows users will need to set 'detached' to false
       options = {
         detached = false,
       },
     }
     dap.adapters.flutter = {
       type = "executable",
-      command = "/Users/kiransilwal/Development/flutter/bin/flutter", -- if you're using fvm, you'll need to provide the full path to flutter (flutter.bat for windows users), or you could prepend the fvm command
+      command = "/Users/kiransilwal/Development/flutter/bin/flutter",
       args = { "debug_adapter" },
-      -- windows users will need to set 'detached' to false
       options = {
         detached = false,
       },
@@ -100,19 +116,6 @@ return {
     local js_based_languages = { "", "typescript", "javascriptreact", "typescriptreact" }
     for _, language in ipairs(js_based_languages) do
       dap.configurations[language] = {
-        -- {
-        --   name = "Next.js: debug server-side",
-        --   type = "pwa-node",
-        --   request = "attach",
-        --   url = "https://localhost:3000",
-        --   skipFiles = { "<node_internals>/**", "node_modules/**" },
-        --   runtimeExecutable = "node",
-        --   webRoot = "${workspaceFolder}",
-        --   sourceMaps = true,
-        --   sourceMapPathOverrides = {
-        --     ["webpack://_N_E/*"] = "${webRoot}/*",
-        --   },
-        -- },
         {
           name = "Next.js: debug server-side",
           type = "pwa-node",
@@ -149,38 +152,36 @@ return {
       }
     end
 
+    -- Dart and Flutter configurations
     dap.configurations.dart = {
       {
         type = "dart",
         request = "launch",
         name = "Launch dart",
-        dartSdkPath = "/Users/kiransilwal/Development/flutter/bin/dart", -- ensure this is correct
-        flutterSdkPath = "/Users/kiransilwal/Development/flutter/bin/flutter", -- ensure this is correct
-        program = "${workspaceFolder}/lib/main.dart", -- ensure this is correct
+        dartSdkPath = "/Users/kiransilwal/Development/flutter/bin/dart",
+        flutterSdkPath = "/Users/kiransilwal/Development/flutter/bin/flutter",
+        program = "${workspaceFolder}/lib/main.dart",
         cwd = "${workspaceFolder}",
       },
       {
         name = "Launch Flutter App",
         type = "flutter",
         request = "launch",
-        dartSdkPath = "/Users/kiransilwal/Development/flutter/bin/dart", -- ensure this is correct
-        flutterSdkPath = "/Users/kiransilwal/Development/flutter/bin/flutter", -- ensure this is correct
+        dartSdkPath = "/Users/kiransilwal/Development/flutter/bin/dart",
+        flutterSdkPath = "/Users/kiransilwal/Development/flutter/bin/flutter",
         program = "${workspaceFolder}/lib/main.dart",
         cwd = "${workspaceFolder}",
         args = function()
-          -- Get the list of connected devices
           local devices = vim.fn.systemlist("flutter devices")
           local device_list = {}
 
-          -- Parse and extract device IDs
           for _, device in ipairs(devices) do
-            local id = device:match("• (%S+)%s") -- Match device ID
+            local id = device:match("%S+%s(%S+)%s")
             if id then
               table.insert(device_list, id)
             end
           end
 
-          -- Prompt user to select a device
           if #device_list == 0 then
             vim.notify("No devices found. Please connect a device and try again.", vim.log.levels.ERROR)
             return {}
@@ -201,110 +202,3 @@ return {
     }
   end,
 }
-
--- {
---   "theHamsta/nvim-dap-virtual-text", -- Virtual text
---   opts = {
---     virt_text_win_col = 80,
---   },
--- },
-
--- return {
---   -- Add nvim-dap
---   {
---     "mfussenegger/nvim-dap",
---     config = function()
---       local dap = require("dap")
---       dap.set_log_level("DEBUG")
---
---       -- Define `pwa-node` adapter
---       dap.adapters["pwa-node"] = {
---         type = "server",
---         host = "localhost",
---         port = "${port}",
---         executable = {
---           command = "node",
---           args = {
---             "/Users/kiransilwal/.local/share/nvim/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js",
---             "${port}",
---           },
---         },
---       }
---
---       -- Define `chrome` adapter
---       dap.adapters["chrome"] = {
---         type = "executable",
---         command = "node",
---         args = { "/Users/kiransilwal/.local/share/nvim/mason/packages/chrome-debug-adapter/out/src/chromeDebug.js" },
---       }
---
---       -- Add Dart/Flutter adapter (NEW)
---       dap.adapters.dart = {
---         type = "executable",
---         command = "dart",
---         args = { "debug_adapter" },
---       }
---
---       -- Configure JavaScript/TypeScript languages
---       local js_based_languages = { "javascript", "typescript", "javascriptreact", "typescriptreact" }
---       for _, language in ipairs(js_based_languages) do
---         dap.configurations[language] = {
---
---           {
---             name = "Next.js: debug server-side",
---             type = "pwa-node",
---             request = "attach",
---             url = "https://localhost:3000",
---             skipFiles = { "<node_internals>/**", "node_modules/**" },
---             webRoot = vim.fn.getcwd(),
---             runtimeExecutable = "node",
---             sourceMaps = true,
---           },
---           {
---             type = "pwa-node",
---             request = "attach",
---             name = "Attach",
---             processId = require("dap.utils").pick_process,
---             cwd = "${workspaceFolder}",
---             url = "https://localhost:3000",
---             skipFiles = { "<node_internals>/**", "node_modules/**" },
---             webRoot = vim.fn.getcwd(),
---             runtimeExecutable = "node",
---             sourceMaps = true,
---           },
---           {
---             name = "Next.js: debug client-side",
---             type = "chrome",
---             request = "launch",
---             url = "http://localhost:3000",
---             webRoot = "${workspaceFolder}",
---             sourceMaps = true,
---             sourceMapPathOverrides = {
---               ["webpack://_N_E/*"] = "${webRoot}/*",
---             },
---           },
---         }
---       end
---
---       -- Add Dart/Flutter configurations (NEW)
---       dap.configurations.dart = {
---         {
---           name = "Launch Flutter App",
---           type = "dart",
---           request = "launch",
---           program = "${workspaceFolder}/lib/main.dart",
---           cwd = "${workspaceFolder}",
---           args = { "--flavor", "development" }, -- Optional Flutter build arguments
---         },
---       }
---     end,
---   },
---
---   -- Optional: Additional plugins
---   {
---     "theHamsta/nvim-dap-virtual-text", -- Virtual text
---     opts = {
---       virt_text_win_col = 80,
---     },
---   },
--- }
