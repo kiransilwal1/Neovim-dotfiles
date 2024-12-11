@@ -1,5 +1,21 @@
 return {
   "mfussenegger/nvim-dap",
+  keys = {
+    {
+      "[",
+      function()
+        require("dap").step_out()
+      end,
+      desc = "Step Out",
+    },
+    {
+      "]",
+      function()
+        require("dap").step_over()
+      end,
+      desc = "Step Over",
+    },
+  },
   dependencies = {
     "rcarriga/nvim-dap-ui",
     lazy = false,
@@ -121,20 +137,14 @@ return {
           type = "pwa-node",
           request = "attach",
           port = 9230,
-          skipFiles = { "<node_internals>/**", "node_modules/**" },
+          skipFiles = {
+            "<node_internals>/**",
+            "node_modules/**",
+            "${workspaceRoot}/node_modules/**/*.js",
+            "${workspaceFolder}/node_modules/**/*.js",
+            "<node_internals>/**/*.js",
+          },
           cwd = "${workspaceFolder}",
-          runtimeExecutable = "node",
-          sourceMaps = true,
-        },
-        {
-          type = "pwa-node",
-          request = "attach",
-          name = "Attach",
-          processId = require("dap.utils").pick_process,
-          cwd = "${workspaceFolder}",
-          url = "https://localhost:3000",
-          skipFiles = { "<node_internals>/**", "node_modules/**" },
-          webRoot = vim.fn.getcwd(),
           runtimeExecutable = "node",
           sourceMaps = true,
         },
@@ -144,9 +154,15 @@ return {
           request = "launch",
           url = "http://localhost:3000",
           webRoot = "${workspaceFolder}",
+          skipFiles = { "<node_internals>/**", "node_modules/**", "${workspaceFolder}/node_modules/**/*.js" },
           sourceMaps = true,
           sourceMapPathOverrides = {
             ["webpack://_N_E/*"] = "${webRoot}/*",
+          },
+          {
+            name = "Debug Full-Stack",
+            type = "composite", -- Use composite to combine multiple configurations
+            configurations = { "Debug Server-Side", "Debug Client-Side" },
           },
         },
       }
