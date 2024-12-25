@@ -47,3 +47,5 @@ luac.out
 *.x86_64
 *.hex
 
+configstore/firebase-tools.json
+configstore/update-notifier-firebase-tools.json
