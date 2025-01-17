@@ -19,7 +19,7 @@ return {
   dependencies = {
     "rcarriga/nvim-dap-ui",
     lazy = false,
-    dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+    dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio", "jbyuki/one-small-step-for-vimkind" },
     opts = {
       layouts = {
         {
@@ -127,9 +127,26 @@ return {
         detached = false,
       },
     }
+    dap.adapters.php = {
+      type = "executable",
+      command = "node",
+      args = { "/Users/kiransilwal/.local/share/nvim/mason/packages/php-debug-adapter/extension/out/phpDebug.js" },
+    }
+
+    dap.configurations.php = {
+      {
+        type = "php",
+        request = "launch",
+        name = "Listen for xdebug",
+        port = "9003",
+        log = false,
+        serverSourceRoot = "/srv/www/",
+        localSourceRoot = "/home/www/VVV/www/",
+      },
+    }
 
     -- Configure JavaScript/TypeScript languages
-    local js_based_languages = { "", "typescript", "javascriptreact", "typescriptreact" }
+    local js_based_languages = { "vue", "typescript", "javascriptreact", "typescriptreact" }
     for _, language in ipairs(js_based_languages) do
       dap.configurations[language] = {
         {
@@ -165,7 +182,45 @@ return {
             configurations = { "Debug Server-Side", "Debug Client-Side" },
           },
         },
+
+        {
+          name = "Vue: Debug Client-Side",
+          type = "chrome",
+          request = "launch",
+          url = "http://localhost:5173", -- Update to match your local dev server URL
+          webRoot = "${workspaceFolder}",
+          sourceMaps = true,
+          skipFiles = { "<node_internals>/**", "node_modules/**" },
+          sourceMapPathOverrides = {
+            ["webpack:///src/*"] = "${webRoot}/src/*",
+            ["webpack:///.*"] = "${webRoot}/*",
+          },
+        },
+        {
+          name = "Vue: Attach to Chrome",
+          type = "chrome",
+          request = "attach",
+          port = 9222, -- Default port for Chrome remote debugging
+          webRoot = "${workspaceFolder}",
+          sourceMaps = true,
+          skipFiles = { "<node_internals>/**", "node_modules/**" },
+          sourceMapPathOverrides = {
+            ["webpack:///src/*"] = "${webRoot}/src/*",
+            ["webpack:///.*"] = "${webRoot}/*",
+          },
+        },
       }
+    end
+    dap.configurations.lua = {
+      {
+        type = "nlua",
+        request = "attach",
+        name = "Attach to running Neovim instance",
+      },
+    }
+
+    dap.adapters.nlua = function(callback, config)
+      callback({ type = "server", host = config.host or "127.0.0.1", port = config.port or 8086 })
     end
 
     -- Dart and Flutter configurations

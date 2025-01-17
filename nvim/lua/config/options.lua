@@ -3,6 +3,7 @@
 -- Add any additional options here
 
 local opt = vim.opt
+vim.g.lazyvim_php_lsp = "intelephense"
 
 opt.conceallevel = 0
 opt.cmdheight = 0

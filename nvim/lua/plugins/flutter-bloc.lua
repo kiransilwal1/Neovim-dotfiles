@@ -1,5 +1,5 @@
 return {
-  "wa11breaker/flutter-bloc.nvim",
+  "kiransilwal1/flutter-bloc.nvim",
   dependencies = {
     "nvimtools/none-ls.nvim", -- Required for code actions
   },

@@ -9,6 +9,7 @@ return {
         "shfmt",
         "tailwindcss-language-server",
         "typescript-language-server",
+        "vue-language-server",
         "css-lsp",
       })
     end,
@@ -27,6 +28,42 @@ return {
             return require("lspconfig.util").root_pattern(".git")(...)
           end,
         },
+        volar = {
+          filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue", "json" },
+          root_dir = function(...)
+            return require("lspconfig.util").root_pattern(
+              "vite.config.js",
+              "package.json",
+              "vite.config.ts",
+              "nuxt.config.js",
+              "nuxt.config.ts",
+              ".git"
+            )(...)
+          end,
+          settings = {
+            volar = {
+              autoCompleteRefs = true,
+            },
+          },
+          init_options = {
+            vue = {
+              hybridMode = false,
+            },
+            typescript = {
+              tsdk = function(root_dir)
+                local local_tsdk_path = root_dir and root_dir .. "/node_modules/typescript/lib"
+                local global_tsdk_path = "/opt/homebrew/lib/node_modules/typescript/lib" -- Adjusted to match the global path
+                -- Check if the local TypeScript exists; fallback to global if not
+                if local_tsdk_path and vim.fn.isdirectory(local_tsdk_path) == 1 then
+                  return local_tsdk_path
+                else
+                  return global_tsdk_path
+                end
+              end,
+            },
+          },
+        },
+
         tsserver = {
           root_dir = function(...)
             return require("lspconfig.util").root_pattern(".git")(...)
@@ -56,6 +93,16 @@ return {
               },
             },
           },
+          init_options = {
+            plugins = {
+              {
+                name = "@vue/typescript-plugin",
+                location = "/opt/homebrew/lib/node_modules/@vue/language-server", -- Adjust path if necessary
+                languages = { "vue" },
+              },
+            },
+          },
+          filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
         },
         html = {},
         lua_ls = {
@@ -127,13 +174,6 @@ return {
       setup = {},
     },
   },
-  -- {
-  -- 	"nvim-cmp",
-  -- 	dependencies = { "hrsh7th/cmp-emoji" },
-  -- 	opts = function(_, opts)
-  -- 		table.insert(opts.sources, { name = "emoji" })
-  -- 	end,
-  -- },
 }
 
 -- return {

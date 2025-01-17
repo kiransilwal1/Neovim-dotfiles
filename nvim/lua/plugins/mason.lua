@@ -48,6 +48,8 @@ return {
         "tflint",
         "vtsls",
         "yaml-language-server",
+        "vue-language-server",
+        "typescript-language-server",
       },
     },
   },
