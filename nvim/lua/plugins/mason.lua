@@ -4,6 +4,7 @@ return {
     opts = {
       ensure_installed = {
         "astro-language-server",
+        "intelephense",
         "bash-language-server",
         "chrome-debug-adapter",
         "clangd",

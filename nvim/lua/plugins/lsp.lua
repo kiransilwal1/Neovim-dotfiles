@@ -11,6 +11,7 @@ return {
         "typescript-language-server",
         "vue-language-server",
         "css-lsp",
+        "intelephense",
       })
     end,
   },
@@ -25,7 +26,7 @@ return {
         cssls = {},
         tailwindcss = {
           root_dir = function(...)
-            return require("lspconfig.util").root_pattern(".git")(...)
+            return require("lspconfig.util").root_pattern("package.json")(...)
           end,
         },
         volar = {
@@ -36,8 +37,7 @@ return {
               "package.json",
               "vite.config.ts",
               "nuxt.config.js",
-              "nuxt.config.ts",
-              ".git"
+              "nuxt.config.ts"
             )(...)
           end,
           settings = {
@@ -66,7 +66,7 @@ return {
 
         tsserver = {
           root_dir = function(...)
-            return require("lspconfig.util").root_pattern(".git")(...)
+            return require("lspconfig.util").root_pattern("package.json")(...)
           end,
           single_file_support = false,
           settings = {
@@ -167,6 +167,81 @@ return {
                   continuation_indent_size = "2",
                 },
               },
+            },
+          },
+        },
+      },
+      intelephense = {
+        root_dir = require("lspconfig").util.root_pattern(".git", "package.json", "wp-config.php"),
+        settings = {
+          intelephense = {
+            stubs = {
+              "bcmath",
+              "bz2",
+              "calendar",
+              "Core",
+              "curl",
+              "date",
+              "dba",
+              "dom",
+              "enchant",
+              "fileinfo",
+              "filter",
+              "ftp",
+              "gd",
+              "gettext",
+              "hash",
+              "iconv",
+              "imap",
+              "intl",
+              "json",
+              "ldap",
+              "libxml",
+              "mbstring",
+              "mcrypt",
+              "mysql",
+              "mysqli",
+              "password",
+              "pcntl",
+              "pcre",
+              "PDO",
+              "pdo_mysql",
+              "Phar",
+              "readline",
+              "recode",
+              "Reflection",
+              "regex",
+              "session",
+              "SimpleXML",
+              "soap",
+              "sockets",
+              "sodium",
+              "SPL",
+              "standard",
+              "superglobals",
+              "sysvsem",
+              "sysvshm",
+              "tokenizer",
+              "xml",
+              "xdebug",
+              "xmlreader",
+              "xmlwriter",
+              "yaml",
+              "zip",
+              "zlib",
+              "wordpress",
+              "woocommerce",
+              "acf-pro",
+              "acf-stubs",
+              "wordpress-globals",
+              "wp-cli",
+              "genesis",
+              "polylang",
+              "sbi",
+            },
+            cmd = { vim.fn.stdpath("data") .. "/mason/bin/intelephense", "--stdio" },
+            files = {
+              maxSize = 200000, -- Increase max file size limit
             },
           },
         },
