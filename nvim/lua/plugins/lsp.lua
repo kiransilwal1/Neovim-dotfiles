@@ -12,6 +12,7 @@ return {
         "vue-language-server",
         "css-lsp",
         "intelephense",
+        "pyright",
       })
     end,
   },
@@ -23,6 +24,21 @@ return {
       inlay_hints = { enabled = true },
       ---@type lspconfig.options
       servers = {
+        pyright = {
+          root_dir = function(fname)
+            return vim.loop.cwd() -- You can adjust this to a specific folder, for example, if you have a `setup.py` file.
+          end,
+          settings = {
+            python = {
+              analysis = {
+                typeCheckingMode = "basic", -- You can set this to "off", "basic", or "strict"
+                diagnosticMode = "openFilesOnly",
+                autoSearchPaths = true,
+                useLibraryCodeForTypes = true,
+              },
+            },
+          },
+        },
         cssls = {},
         tailwindcss = {
           root_dir = function(...)
@@ -239,7 +255,7 @@ return {
               "polylang",
               "sbi",
             },
-            cmd = { vim.fn.stdpath("data") .. "/mason/bin/intelephense", "--stdio" },
+            cmd = { vim.fn.stdpath("data") .. "/mason/packages/intelephense", "--stdio" },
             files = {
               maxSize = 200000, -- Increase max file size limit
             },

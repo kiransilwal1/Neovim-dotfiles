@@ -1,6 +1,7 @@
 -- Options are automatically loaded before lazy.nvim startup
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
+vim.g.python3_host_prog = "/opt/homebrew/bin/python3"
 
 local opt = vim.opt
 vim.g.lazyvim_php_lsp = "intelephense"
@@ -11,7 +12,7 @@ vim.opt.foldenable = false
 
 vim.g.root_spec = { "cwd" }
 vim.g.omni_sql_no_default_maps = 1
-vim.g.python3_host_prog = "/usr/bin/python3"
+-- vim.g.python3_host_prog = "/usr/bin/python3"
 vim.opt.termguicolors = true
 
 -- Define the custom highlight group

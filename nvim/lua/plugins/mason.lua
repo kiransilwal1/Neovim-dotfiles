@@ -54,4 +54,44 @@ return {
       },
     },
   },
+  {
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    config = function()
+      require("mason-tool-installer").setup({
+        ensure_installed = {
+          "black",
+          "debugpy",
+          "flake8",
+          "isort",
+          "mypy",
+          "pylint",
+        },
+      })
+    end,
+  },
+  {
+    "psf/black",
+    ft = "python",
+    config = function()
+      vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+        pattern = "*.py",
+        callback = function()
+          vim.cmd("Black")
+        end,
+      })
+    end,
+  },
+  {
+    "fisadev/vim-isort",
+    ft = "python",
+    config = function()
+      vim.g.vim_isort_map = ""
+      vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+        pattern = "*.py",
+        callback = function()
+          vim.cmd("Isort")
+        end,
+      })
+    end,
+  },
 }
