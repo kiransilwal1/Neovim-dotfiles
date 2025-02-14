@@ -15,6 +15,9 @@ keymap.set("i", "jj", "<ESC>", { desc = "Exit insert mode with jk" })
 keymap.set("n", "ff", ":ZenMode<Return>", { desc = "Exit insert mode with jk" })
 keymap.set("n", "<Space>ca", vim.lsp.buf.code_action, { noremap = true, silent = true })
 
+-- vim rest console
+keymap.set("n", "<Space>xR", ":call VrcQuery()<CR>", { noremap = true, silent = true })
+
 vim.keymap.set("n", "<leader>dl", function()
   require("osv").launch({ port = 8086 })
 end, { noremap = true })

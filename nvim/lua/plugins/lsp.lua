@@ -21,7 +21,7 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = {
-      inlay_hints = { enabled = true },
+      -- inlay_hints = { enabled = true },
       ---@type lspconfig.options
       servers = {
         pyright = {
@@ -31,10 +31,20 @@ return {
           settings = {
             python = {
               analysis = {
-                typeCheckingMode = "basic", -- You can set this to "off", "basic", or "strict"
+                typeCheckingMode = "strict", -- You can set this to "off", "basic", or "strict"
+                reportAbstractMethod = "error",
                 diagnosticMode = "openFilesOnly",
                 autoSearchPaths = true,
                 useLibraryCodeForTypes = true,
+              },
+            },
+          },
+        },
+        jsonls = {
+          settings = {
+            json = {
+              format = {
+                enable = true,
               },
             },
           },
@@ -45,40 +55,40 @@ return {
             return require("lspconfig.util").root_pattern("package.json")(...)
           end,
         },
-        volar = {
-          filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue", "json" },
-          root_dir = function(...)
-            return require("lspconfig.util").root_pattern(
-              "vite.config.js",
-              "package.json",
-              "vite.config.ts",
-              "nuxt.config.js",
-              "nuxt.config.ts"
-            )(...)
-          end,
-          settings = {
-            volar = {
-              autoCompleteRefs = true,
-            },
-          },
-          init_options = {
-            vue = {
-              hybridMode = false,
-            },
-            typescript = {
-              tsdk = function(root_dir)
-                local local_tsdk_path = root_dir and root_dir .. "/node_modules/typescript/lib"
-                local global_tsdk_path = "/opt/homebrew/lib/node_modules/typescript/lib" -- Adjusted to match the global path
-                -- Check if the local TypeScript exists; fallback to global if not
-                if local_tsdk_path and vim.fn.isdirectory(local_tsdk_path) == 1 then
-                  return local_tsdk_path
-                else
-                  return global_tsdk_path
-                end
-              end,
-            },
-          },
-        },
+        -- volar = {
+        --   filetypes = { "vue" },
+        --   root_dir = function(...)
+        --     return require("lspconfig.util").root_pattern(
+        --       "vite.config.js",
+        --       "package.json",
+        --       "vite.config.ts",
+        --       "nuxt.config.js",
+        --       "nuxt.config.ts"
+        --     )(...)
+        --   end,
+        --   settings = {
+        --     volar = {
+        --       autoCompleteRefs = true,
+        --     },
+        --   },
+        --   init_options = {
+        --     vue = {
+        --       hybridMode = false,
+        --     },
+        --     typescript = {
+        --       tsdk = function(root_dir)
+        --         local local_tsdk_path = root_dir and root_dir .. "/node_modules/typescript/lib"
+        --         local global_tsdk_path = "/opt/homebrew/lib/node_modules/typescript/lib" -- Adjusted to match the global path
+        --         -- Check if the local TypeScript exists; fallback to global if not
+        --         if local_tsdk_path and vim.fn.isdirectory(local_tsdk_path) == 1 then
+        --           return local_tsdk_path
+        --         else
+        --           return global_tsdk_path
+        --         end
+        --       end,
+        --     },
+        --   },
+        -- },
 
         tsserver = {
           root_dir = function(...)
@@ -255,9 +265,9 @@ return {
               "polylang",
               "sbi",
             },
-            cmd = { vim.fn.stdpath("data") .. "/mason/packages/intelephense", "--stdio" },
+            -- cmd = { vim.fn.stdpath("data") .. "/mason/packages/intelephense", "--stdio" },
             files = {
-              maxSize = 200000, -- Increase max file size limit
+              maxSize = 500000000, -- Increase max file size limit
             },
           },
         },

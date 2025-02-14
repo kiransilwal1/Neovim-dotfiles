@@ -1,7 +1,18 @@
 -- Options are automatically loaded before lazy.nvim startup
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
+
+-- Php related configs
 vim.g.python3_host_prog = "/opt/homebrew/bin/python3"
+vim.api.nvim_create_autocmd("BufRead", {
+  pattern = "*.php",
+  command = "set filetype=php",
+})
+vim.diagnostic.config({
+  virtual_text = true,
+  signs = true,
+  update_in_insert = false,
+})
 
 local opt = vim.opt
 vim.g.lazyvim_php_lsp = "intelephense"
