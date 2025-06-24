@@ -34,6 +34,29 @@ vim.keymap.set("n", "<leader>gg", function()
   Util.terminal({ "lazygit" }, { cwd = Util.root(), esc_esc = false, ctrl_hjkl = false, border = "none" })
 end, { desc = "Lazygit (root dir)" })
 
+function compile_and_run_c_file()
+  local filepath = vim.fn.expand("%")
+  local dirpath = vim.fn.fnamemodify(filepath, ":h")
+  local filename = vim.fn.fnamemodify(filepath, ":t:r")
+  local output_executable = dirpath .. "/" .. filename
+
+  -- Compile the C file
+  local compile_command = "gcc -o " .. output_executable .. " " .. filepath .. " 2>&1"
+  local compile_output = vim.fn.system(compile_command)
+
+  -- Check for compilation errors
+  if vim.v.shell_error ~= 0 then
+    vim.notify("Compilation failed:\n" .. compile_output, vim.log.levels.ERROR)
+    return
+  end
+
+  -- Run the compiled executable in a new terminal window
+  local run_command = "alacritty -e " .. output_executable -- Change `alacritty` to your terminal
+  vim.fn.jobstart(run_command, { detach = true })
+end
+
+vim.api.nvim_set_keymap("n", "<leader>cx", ":lua compile_and_run_c_file()<CR>", { noremap = true, silent = true })
+
 -- keymap.del({ "n", "i", "v" }, "<A-j>")
 -- keymap.del({ "n", "i", "v" }, "<A-k>")
 -- keymap.del("n", "<C-Left>")
@@ -53,7 +76,7 @@ keymap.set("n", "<leader>1", "<cmd>Inspect<CR>", { desc = "Execute the current f
 local set_keymap = vim.api.nvim_set_keymap
 
 -- These mappings control the size of splits (height/width)
--- keymap.set("n", "<M-,>", "<c-w>5<")
+--keymap.set("n", "<M-,>", "<c-w>5<")
 -- keymap.set("n", "<M-.>", "<c-w>5>")
 -- keymap.set("n", "<M-t>", "<C-W>+")
 -- keymap.set("n", "<M-s>", "<C-W>-")
@@ -101,3 +124,66 @@ set_keymap(
   "<cmd>lua require('package-info').change_version()<cr>",
   { silent = true, noremap = true, desc = "Change package version" }
 )
+
+-- Obsidian related keymaps
+--------------
+-- obsidian --
+--------------
+--
+-- >>> oo # from shell, navigate to vault (optional)
+--
+-- # NEW NOTE
+-- >>> on "Note Name" # call my "obsidian new note" shell script (~/bin/on)
+-- >>>
+-- >>> ))) <leader>on # inside vim now, format note as template
+-- >>> ))) # add tag, e.g. fact / blog / video / etc..
+-- >>> ))) # add hubs, e.g. [[python]], [[machine-learning]], etc...
+-- >>> ))) <leader>of # format title
+--
+-- # END OF DAY/WEEK REVIEW
+-- >>> or # review notes in inbox
+-- >>>
+-- >>> ))) <leader>ok # inside vim now, move to zettelkasten
+-- >>> ))) <leader>odd # or delete
+-- >>>
+-- >>> og # organize saved notes from zettelkasten into notes/[tag] folders
+-- >>> ou # sync local with Notion
+--
+-- navigate to vault
+vim.keymap.set(
+  "n",
+  "<leader>oo",
+  ":cd /Users/kiransilwal/library/Mobile\\ Documents/iCloud~md~obsidian/Documents/KiranSecondBrain<cr>"
+)
+--
+-- convert note to template and remove leading white space
+vim.keymap.set("n", "<leader>on", ":ObsidianTemplate note<cr> :lua vim.cmd([[1,/^\\S/s/^\\n\\{1,}//]])<cr>")
+-- strip date from note title and replace dashes with spaces
+-- must have cursor on title
+vim.keymap.set("n", "<leader>of", ":s/\\(# \\)[^_]*_/\\1/ | s/-/ /g<cr>")
+--
+-- search for files in full vault
+vim.keymap.set(
+  "n",
+  "<leader>os",
+  ':Telescope find_files search_dirs={"/Users/kiransilwal/library/Mobile\\ Documents/iCloud~md~obsidian/Documents/KiranSecondBrain/notes"}<cr>'
+)
+vim.keymap.set(
+  "n",
+  "<leader>oz",
+  ':Telescope live_grep search_dirs={"/Users/kiransilwal/library/Mobile\\ Documents/iCloud~md~obsidian/Documents/KiranSecondBrain/notes"}<cr>'
+)
+--
+-- search for files in notes (ignore zettelkasten)
+-- vim.keymap.set("n", "<leader>ois", ":Telescope find_files search_dirs={\"/Users/alex/library/Mobile\\ Documents/iCloud~md~obsidian/Documents/ZazenCodes/notes\"}<cr>")
+-- vim.keymap.set("n", "<leader>oiz", ":Telescope live_grep search_dirs={\"/Users/alex/library/Mobile\\ Documents/iCloud~md~obsidian/Documents/ZazenCodes/notes\"}<cr>")
+--
+-- for review workflow
+-- move file in current buffer to zettelkasten folder
+vim.keymap.set(
+  "n",
+  "<leader>ok",
+  ":!mv '%:p' /Users/kiransilwal/library/Mobile\\ Documents/iCloud~md~obsidian/Documents/KiranSecondBrain/zettelkasten<cr>:bd<cr>"
+)
+-- delete file in current buffer
+vim.keymap.set("n", "<leader>odd", ":!rm '%:p'<cr>:bd<cr>")

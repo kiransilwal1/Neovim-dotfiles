@@ -93,6 +93,48 @@ return {
     vim.api.nvim_set_hl(0, "DapStopped", { fg = "#98c379", bg = "NONE", bold = true })
     vim.api.nvim_set_hl(0, "DapStoppedLine", { bg = "#424242" }) -- Line highlight for stopped execution
 
+    -- Python dap configurations
+    dap.adapters.python = {
+      type = "server",
+      host = "127.0.0.1",
+      port = 5678, -- must match the port used in debugpy
+    }
+
+    dap.configurations.python = {
+      {
+        type = "python",
+        request = "attach",
+        name = "Attach to FastAPI (debugpy)",
+        connect = {
+          port = 5678,
+          host = "127.0.0.1",
+        },
+        mode = "remote",
+        pathMappings = {
+          {
+            localRoot = vim.fn.getcwd(), -- adjust if code is in a different folder
+            remoteRoot = ".",
+          },
+        },
+      },
+    }
+
+    dap.adapters.python = {
+      type = "executable",
+      command = vim.fn.exepath("python"), -- Uses the Python from the current terminal session
+      args = { "-m", "debugpy.adapter" },
+    }
+
+    dap.configurations.python = {
+      {
+        type = "python",
+        request = "launch",
+        name = "Launch file",
+        program = "${file}", -- Runs the current file
+        console = "integratedTerminal", -- Runs in the same terminal as Neovim
+      },
+    }
+
     -- Adapter configurations
     dap.adapters["pwa-node"] = {
       type = "server",
@@ -143,10 +185,20 @@ return {
         serverSourceRoot = "/srv/www/",
         localSourceRoot = "/home/www/VVV/www/",
       },
+      {
+        type = "php",
+        request = "launch",
+        name = "Individual debugging",
+        port = "9003",
+        -- pathMappings = {
+        --   [vim.fn.getcwd()] = "/var/www/html/", -- map local to remote dynamically based on current directory
+        -- },
+        localSourceRoot = vim.fn.getcwd(),
+      },
     }
 
     -- Configure JavaScript/TypeScript languages
-    local js_based_languages = { "vue", "typescript", "javascriptreact", "typescriptreact" }
+    local js_based_languages = { "vue", "typescript", "javascriptreact", "typescriptreact", "javascript" }
     for _, language in ipairs(js_based_languages) do
       dap.configurations[language] = {
         {
@@ -166,6 +218,41 @@ return {
           sourceMaps = true,
         },
         {
+          type = "pwa-node",
+          request = "attach",
+          name = "Attach to Node (Javascript)",
+          port = 9229,
+          restart = true,
+          sourceMaps = true,
+          protocol = "inspector",
+          skipFiles = { "<node_internals>/**" },
+        },
+        {
+          type = "pwa-node",
+          request = "launch",
+          name = "Debug MCP Server (ts-node)",
+          runtimeExecutable = "ts-node",
+          runtimeArgs = { "--inspect-brk" },
+          args = { "${workspaceFolder}/src/index.ts" },
+          cwd = "${workspaceFolder}",
+          console = "integratedTerminal",
+          sourceMaps = true,
+          skipFiles = { "<node_internals>/**" },
+          autoAttachChildProcesses = true, -- Important for handling child processes
+          resolveSourceMapLocations = {
+            "${workspaceFolder}/**/*.js",
+            "${workspaceFolder}/**/*.ts",
+            "!**/node_modules/**",
+          },
+        },
+
+        {
+          name = "Node Server",
+          type = "pwa-node",
+          request = "attach",
+          port = 9229,
+        },
+        {
           name = "Next.js: debug client-side",
           type = "chrome",
           request = "launch",
@@ -175,6 +262,7 @@ return {
           sourceMaps = true,
           sourceMapPathOverrides = {
             ["webpack://_N_E/*"] = "${webRoot}/*",
+            ["turbopack://_N_E/*"] = "${webRoot}/*",
           },
           {
             name = "Debug Full-Stack",

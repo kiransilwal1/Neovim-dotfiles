@@ -31,7 +31,7 @@ return {
           settings = {
             python = {
               analysis = {
-                typeCheckingMode = "strict", -- You can set this to "off", "basic", or "strict"
+                typeCheckingMode = "basic", -- You can set this to "off", "basic", or "strict"
                 reportAbstractMethod = "error",
                 diagnosticMode = "openFilesOnly",
                 autoSearchPaths = true,
@@ -49,8 +49,10 @@ return {
             },
           },
         },
+        vhdl_ls = {},
         cssls = {},
         tailwindcss = {
+          filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue", "html", "php" },
           root_dir = function(...)
             return require("lspconfig.util").root_pattern("package.json")(...)
           end,
@@ -130,7 +132,9 @@ return {
           },
           filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
         },
-        html = {},
+        html = {
+          filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue", "php" },
+        },
         lua_ls = {
           -- enabled = false,
           single_file_support = true,
@@ -201,6 +205,9 @@ return {
         root_dir = require("lspconfig").util.root_pattern(".git", "package.json", "wp-config.php"),
         settings = {
           intelephense = {
+            environment = {
+              include = { vim.fn.getcwd() .. "/vendor/**/*.php" }, -- Attach from the current working directory
+            },
             stubs = {
               "bcmath",
               "bz2",

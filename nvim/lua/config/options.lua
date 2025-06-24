@@ -13,6 +13,11 @@ vim.diagnostic.config({
   signs = true,
   update_in_insert = false,
 })
+vim.lsp.set_log_level("OFF")
+
+-- avante.nvim related option
+-- views can only be fully collapsed with the global statusline
+vim.opt.laststatus = 3
 
 local opt = vim.opt
 vim.g.lazyvim_php_lsp = "intelephense"
