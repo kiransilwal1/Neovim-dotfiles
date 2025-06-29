@@ -17,7 +17,7 @@ vim.diagnostic.config({
 local opt = vim.opt
 vim.g.lazyvim_php_lsp = "intelephense"
 
-opt.conceallevel = 0
+opt.conceallevel = 2
 opt.cmdheight = 0
 vim.opt.foldenable = false
 

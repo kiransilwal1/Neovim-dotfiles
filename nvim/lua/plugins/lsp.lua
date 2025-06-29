@@ -20,6 +20,7 @@ return {
   -- lsp servers
   {
     "neovim/nvim-lspconfig",
+    dependencies = { "saghen/blink.cmp" },
     opts = {
       -- inlay_hints = { enabled = true },
       ---@type lspconfig.options
@@ -31,7 +32,7 @@ return {
           settings = {
             python = {
               analysis = {
-                typeCheckingMode = "strict", -- You can set this to "off", "basic", or "strict"
+                typeCheckingMode = "basic", -- You can set this to "off", "basic", or "strict"
                 reportAbstractMethod = "error",
                 diagnosticMode = "openFilesOnly",
                 autoSearchPaths = true,

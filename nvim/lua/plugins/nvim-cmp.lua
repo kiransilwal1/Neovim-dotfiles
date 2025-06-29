@@ -1,0 +1,23 @@
+return {}
+--   "hrsh7th/nvim-cmp",
+--   ft = "markdown", -- Load cmp only for Markdown (Obsidian)
+--   dependencies = {
+--     "hrsh7th/cmp-nvim-lsp",
+--     "hrsh7th/cmp-buffer",
+--     "hrsh7th/cmp-path",
+--     "hrsh7th/cmp-cmdline",
+--   },
+--   config = function()
+--     require("cmp").setup({
+--       sources = {
+--         { name = "buffer" }, -- Enable buffer completion for notes
+--         { name = "path" }, -- Enable path completion
+--       },
+--       mapping = require("cmp").mapping.preset.insert({
+--         ["<Tab>"] = require("cmp").mapping.select_next_item(),
+--         ["<S-Tab>"] = require("cmp").mapping.select_prev_item(),
+--         ["<CR>"] = require("cmp").mapping.confirm({ select = true }),
+--       }),
+--     })
+--   end,
+-- }
