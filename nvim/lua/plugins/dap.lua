@@ -134,16 +134,29 @@ return {
     }
 
     dap.configurations.php = {
-      {
-        type = "php",
-        request = "launch",
-        name = "Listen for xdebug",
-        port = "9003",
-        log = false,
-        serverSourceRoot = "/srv/www/",
-        localSourceRoot = "/home/www/VVV/www/",
-      },
-    }
+  {
+    type = "php",
+    request = "launch",
+    name = "Listen for Xdebug",
+    port = 9003,
+    pathMappings = {
+      [vim.fn.getcwd()] = vim.fn.getcwd(),
+    },
+  }
+}
+
+
+    -- dap.configurations.php = {
+    --   {
+    --     type = "php",
+    --     request = "launch",
+    --     name = "Listen for xdebug",
+    --     port = "9003",
+    --     log = false,
+    --     serverSourceRoot = vim.fn.getcwd(),
+    --     localSourceRoot = vim.fn.getcwd(),
+    --   },
+    -- }
 
     -- Configure JavaScript/TypeScript languages
     local js_based_languages = { "vue", "typescript", "javascriptreact", "typescriptreact" }

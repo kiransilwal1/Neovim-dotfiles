@@ -8,7 +8,7 @@ return {
       plugins = {
         kitty = {
           enabled = true,
-          font = "+4", -- font size increment
+          font = "+8", -- font size increment
         },
         options = {
           laststatus = 0,
@@ -17,9 +17,6 @@ return {
           enabled = false,
         },
       },
-      on_open = function()
-        require("package-info").hide()
-      end,
     },
   },
 }
