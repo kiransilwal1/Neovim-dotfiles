@@ -51,3 +51,8 @@ configstore/firebase-tools.json
 configstore/update-notifier-firebase-tools.json
 qBittorrent
 instructlab
+ngrok
+fish/conf.d
+fish/conf.d
+fish/conf.d/uv.env.fish
+uv
