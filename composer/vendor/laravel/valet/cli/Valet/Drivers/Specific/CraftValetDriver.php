@@ -34,7 +34,7 @@ class CraftValetDriver extends ValetDriver
     /**
      * Determine if the incoming request is for a static file.
      */
-    public function isStaticFile(string $sitePath, string $siteName, string $uri)/*: string|false */
+    public function isStaticFile(string $sitePath, string $siteName, string $uri)/* : string|false */
     {
         $frontControllerDirectory = $this->frontControllerDirectory($sitePath);
 
@@ -192,6 +192,10 @@ class CraftValetDriver extends ValetDriver
         $_SERVER['SCRIPT_NAME'] = $scriptName;
         $_SERVER['PHP_SELF'] = $scriptName;
         $_SERVER['DOCUMENT_ROOT'] = $sitePath.'/'.$frontControllerDirectory;
+
+        if (isset($_SERVER['argv'])) {
+            unset($_SERVER['argv']);
+        }
 
         return $indexPath;
     }

@@ -27,8 +27,9 @@ class PhpFpm
 
         $this->files->ensureDirExists(VALET_HOME_PATH.'/Log', user());
 
-        $phpVersion = $this->brew->linkedPhp();
-        $this->createConfigurationFiles($phpVersion);
+        foreach ($this->utilizedPhpVersions() as $phpVersion) {
+            $this->createConfigurationFiles($phpVersion);
+        }
 
         // Remove old valet.sock
         $this->files->unlink(VALET_HOME_PATH.'/valet.sock');
@@ -36,7 +37,8 @@ class PhpFpm
 
         $this->restart();
 
-        $this->symlinkPrimaryValetSock($phpVersion);
+        $linkedPhpVersion = $this->brew->linkedPhp();
+        $this->symlinkPrimaryValetSock($linkedPhpVersion);
     }
 
     /**
@@ -330,6 +332,6 @@ class PhpFpm
                     return $this->normalizePhpVersion(str_replace(['valet', '.sock'], '', $sock));
                 }
             }
-        })->merge([$this->brew->getLinkedPhpFormula()])->filter()->unique()->values()->toArray();
+        })->merge([$this->brew->linkedPhp()])->filter()->unique()->values()->toArray();
     }
 }

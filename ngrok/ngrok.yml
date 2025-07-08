@@ -1,0 +1,6 @@
+version: "2"
+authtoken: 1QlyjltMOd6PHiqDPCCEaPrfZvy_6fkLwSVDybsJ4Gr5ruWrU
+tunnels:
+  abk-supplies:
+    addr: http://abk-supplies.test:80
+    proto: http
