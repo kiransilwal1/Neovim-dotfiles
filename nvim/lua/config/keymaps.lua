@@ -166,7 +166,7 @@ vim.keymap.set("n", "<leader>of", ":s/\\(# \\)[^_]*_/\\1/ | s/-/ /g<cr>")
 vim.keymap.set(
   "n",
   "<leader>os",
-  ':Telescope find_files search_dirs={"/Users/kiransilwal/library/Mobile\\ Documents/iCloud~md~obsidian/Documents/KiranSecondBrain/notes"}<cr>'
+  ':Telescope find_files search_dirs={"/Users/kiransilwal/library/Mobile\\ Documents/iCloud~md~obsidian/Documents/KiranSecondBrain"}<cr>'
 )
 vim.keymap.set(
   "n",
