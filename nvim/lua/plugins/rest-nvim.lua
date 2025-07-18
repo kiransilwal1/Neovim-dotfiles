@@ -9,7 +9,6 @@ return {
   },
   ft = { "http", "rest" },
   opts = {
-    additional_curl_options = { "--insecure", "-A", "Mozilla/5.0" },
     -- Disable global keymaps, use only the ones defined above
     global_keymaps = false,
     -- Set prefix for global keymaps (not used since global_keymaps = false)
@@ -33,11 +32,12 @@ return {
         formatter = { "tidy", "-i", "-q", "-" },
       },
     },
-    -- For handling SSL issues with .test domains
-    curl_options = {
-      ["--insecure"] = true,
-      ["--location"] = true,  -- Follow redirects (equivalent to -L flag)
-      ["--max-redirs"] = "5", -- Limit redirects
+    -- Updated curl options for handling redirects and SSL
+    additional_curl_options = { 
+      "--insecure",           -- Handle SSL issues with .test domains
+      "--location",           -- Follow redirects (equivalent to -L flag)
+      "--max-redirs", "5",    -- Limit redirects to 5
+      "-A", "Mozilla/5.0"     -- User agent
     },
   },
 }
