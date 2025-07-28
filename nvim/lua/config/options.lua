@@ -33,17 +33,6 @@ vim.opt.termguicolors = true
 
 -- Define the custom highlight group
 -- vim.api.nvim_set_hl(0, "ReturnKeyword", { bold = true, italic = true, fg = "#ffbd5e" })
-vim.api.nvim_set_hl(0, "@keyword.return.", { bold = true, italic = true, fg = "#61afef" })
-
--- Define your custom highlight groups
-vim.api.nvim_set_hl(0, "FunctionReturn", { fg = "#61afef", bold = true }) -- Blue for return-related
-vim.api.nvim_set_hl(0, "TypeDefinition", { fg = "#e5c07b", bold = true }) -- Yellow for types
-
--- Link Tree-sitter groups to your custom highlight groups
-vim.api.nvim_set_hl(0, "@function", { link = "FunctionReturn" }) -- Functions
-vim.api.nvim_set_hl(0, "@keyword.return", { link = "FunctionReturn" }) -- Return keywords
-vim.api.nvim_set_hl(0, "@type", { link = "TypeDefinition" }) -- Classes/Types
-vim.api.nvim_set_hl(0, "@type.definition", { link = "TypeDefinition" }) -- Type definitions
 --
 -- vim.fn.sign_define("DapBreakpoint", {})
 -- vim.fn.sign_define("DapStopped", {})

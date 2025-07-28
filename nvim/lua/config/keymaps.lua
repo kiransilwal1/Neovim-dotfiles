@@ -4,6 +4,61 @@
 local keymap = vim.keymap
 local opts = { noremap = true, silent = true }
 local Util = require("lazyvim.util")
+vim.keymap.set("n", "<leader>hi", function()
+  local ts_utils = require("nvim-treesitter.ts_utils")
+  local node = ts_utils.get_node_at_cursor()
+
+  if not node then
+    print("No Tree-sitter node found under cursor")
+    return
+  end
+
+  local bufnr = vim.api.nvim_get_current_buf()
+  local lang = vim.treesitter.language.get_lang(vim.bo[bufnr].filetype)
+  local query = vim.treesitter.query.get(lang, "highlights")
+
+  local captures = {}
+  for id, capture, metadata in query:iter_captures(node, bufnr, node:start(), node:end_()) do
+    local hl_group = query.hl_map[capture]
+    local hl = vim.api.nvim_get_hl(0, { name = hl_group or "", link = true })
+    table.insert(captures, {
+      capture = capture,
+      group = hl_group,
+      fg = hl.fg and string.format("#%06x", hl.fg) or "N/A",
+      bg = hl.bg and string.format("#%06x", hl.bg) or "N/A",
+    })
+  end
+
+  if #captures == 0 then
+    print("No captures found under cursor")
+    return
+  end
+
+  vim.notify(
+    table.concat(
+      vim.tbl_map(function(cap)
+        return string.format("%s (%s) → fg: %s, bg: %s", cap.capture, cap.group or "nil", cap.fg, cap.bg)
+      end, captures),
+      "\n"
+    ),
+    vim.log.levels.INFO,
+    { title = "TS Highlights" }
+  )
+end, { desc = "Show TS captures with colors" })
+
+vim.keymap.set(
+  "n",
+  "<leader>hi",
+  "<cmd>TSHighlightCapturesUnderCursor<CR>",
+  { desc = "Tree-sitter capture under cursor" }
+)
+-- Normal mode
+keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+
+-- Visual mode
+keymap.set("v", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+keymap.set("v", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
 keymap.set("n", "<C-h>", "<Cmd>NvimTmuxNavigateLeft<CR>", { silent = true })
 keymap.set("n", "<C-j>", "<Cmd>NvimTmuxNavigateDown<CR>", { silent = true })

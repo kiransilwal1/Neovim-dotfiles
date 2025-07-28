@@ -1,52 +1,57 @@
 return {
-  require("gitsigns").setup({
-    signs = {
-      add = { text = "┃" },
-      change = { text = "┃" },
-      delete = { text = "_" },
-      topdelete = { text = "‾" },
-      changedelete = { text = "~" },
-      untracked = { text = "┆" },
-    },
-    signs_staged = {
-      add = { text = "┃" },
-      change = { text = "┃" },
-      delete = { text = "_" },
-      topdelete = { text = "‾" },
-      changedelete = { text = "~" },
-      untracked = { text = "┆" },
-    },
-    signs_staged_enable = true,
-    signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
-    numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
-    linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
-    word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
-    watch_gitdir = {
-      follow_files = true,
-    },
-    auto_attach = true,
+  "lewis6991/gitsigns.nvim",
+  opts = {
     attach_to_untracked = false,
-    current_line_blame = true, -- Toggle with `:Gitsigns toggle_current_line_blame`
-    current_line_blame_opts = {
-      virt_text = true,
-      virt_text_pos = "eol", -- 'eol' | 'overlay' | 'right_align'
-      delay = 1000,
-      ignore_whitespace = false,
-      virt_text_priority = 100,
-      use_focus = true,
-    },
-    current_line_blame_formatter = "<author>, <author_time:%R> - <summary>",
-    sign_priority = 6,
-    update_debounce = 100,
-    status_formatter = nil, -- Use default
-    max_file_length = 40000, -- Disable if file is longer than this (in lines)
     preview_config = {
-      -- Options passed to nvim_open_win
-      border = "single",
-      style = "minimal",
-      relative = "cursor",
-      row = 0,
+      border = "solid",
+      row = 1,
       col = 1,
     },
-  }),
+    signcolumn = true,
+    signs = {
+      change = { text = "┋" },
+    },
+    signs_staged = {
+      change = { text = "┋" },
+    },
+    update_debounce = 500,
+    on_attach = function(bufnr)
+      local gs = package.loaded.gitsigns
+
+      local function map(mode, l, r, opts)
+        opts = opts or {}
+        opts.buffer = bufnr
+        vim.keymap.set(mode, l, r, opts)
+      end
+
+      map("n", "<leader>gb", function()
+        gs.blame_line({ full = false })
+      end)
+      map("n", "<leader>gd", gs.diffthis)
+      map("n", "<leader>gD", function()
+        gs.diffthis("~")
+      end)
+      map("n", "<leader>gt", gs.toggle_signs)
+      map("n", "<leader>hp", gs.preview_hunk)
+      map("n", "<leader>hu", gs.undo_stage_hunk)
+
+      map({ "n", "v" }, "<leader>hs", ":Gitsigns stage_hunk<CR>")
+      map({ "n", "v" }, "<leader>hr", ":Gitsigns reset_hunk<CR>")
+
+      for map_str, fn in pairs({
+        ["]h"] = gs.next_hunk,
+        ["[h"] = gs.prev_hunk,
+      }) do
+        map("n", map_str, function()
+          if vim.wo.diff then
+            return map_str
+          end
+          vim.schedule(function()
+            fn()
+          end)
+          return "<Ignore>"
+        end, { expr = true })
+      end
+    end,
+  },
 }
