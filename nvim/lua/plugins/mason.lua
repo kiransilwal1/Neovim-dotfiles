@@ -3,7 +3,6 @@ return {
     "williamboman/mason.nvim",
     opts = {
       ensure_installed = {
-        "astro-language-server",
         "intelephense",
         "bash-language-server",
         "chrome-debug-adapter",
@@ -17,7 +16,6 @@ return {
         "docker-compose-language-service",
         "dockerfile-language-server",
         "eslint-lsp",
-        "emmet-ls",
         "gofumpt",
         "goimports",
         "gopls",
@@ -47,10 +45,8 @@ return {
         "tailwindcss-language-server",
         "terraform-ls",
         "tflint",
-        "vtsls",
         "yaml-language-server",
         "vue-language-server",
-        "typescript-language-server",
       },
     },
   },
@@ -92,13 +88,6 @@ return {
           vim.cmd("Isort")
         end,
       })
-    end,
-  },
-  {
-    "mattn/emmet-vim",
-    ft = { "html", "css", "javascriptreact", "typescriptreact", "vue", "php" },
-    config = function()
-      vim.g.user_emmet_leader_key = "<C-y>"
     end,
   },
 }
