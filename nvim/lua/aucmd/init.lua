@@ -7,21 +7,21 @@ local grp
 ---- Upon entering
 grp = augrp("Entering", { clear = true })
 
-aucmd("BufEnter", {
-  group = grp,
-  callback = function()
-    local path = vim.api.nvim_buf_get_name(0)
-    local root = tools.get_path_root(path)
-
-    if root ~= nil then
-      vim.cmd(":lcd " .. root)
-
-      tools.get_git_branch(root)
-      tools.get_git_remote_name(root)
-    end
-  end,
-  desc = "Set root dir and initialize version control branch",
-})
+-- aucmd("BufEnter", {
+--   group = grp,
+--   callback = function()
+--     local path = vim.api.nvim_buf_get_name(0)
+--     local root = tools.get_path_root(path)
+--
+--     if root ~= nil then
+--       vim.cmd(":lcd " .. root)
+--
+--       tools.get_git_branch(root)
+--       tools.get_git_remote_name(root)
+--     end
+--   end,
+--   desc = "Set root dir and initialize version control branch",
+-- })
 
 aucmd("BufEnter", {
   group = grp,

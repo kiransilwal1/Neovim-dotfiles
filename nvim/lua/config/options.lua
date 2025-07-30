@@ -30,6 +30,15 @@ vim.g.root_spec = { "cwd" }
 vim.g.omni_sql_no_default_maps = 1
 -- vim.g.python3_host_prog = "/usr/bin/python3"
 vim.opt.termguicolors = true
+vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+vim.api.nvim_set_hl(0, "FloatBorder", { bg = "none" })
+vim.api.nvim_set_hl(0, "NotifyBackground", { bg = "none" })
+vim.api.nvim_set_hl(0, "NeoTreeNormal", { bg = "none" })
+vim.api.nvim_set_hl(0, "NeoTreeNormalNC", { bg = "none" })
+vim.cmd([[
+  highlight! NormalFloat guibg=NONE
+  highlight! FloatBorder guibg=NONE
+]])
 
 -- Define the custom highlight group
 -- vim.api.nvim_set_hl(0, "ReturnKeyword", { bold = true, italic = true, fg = "#ffbd5e" })

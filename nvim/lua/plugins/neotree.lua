@@ -4,6 +4,10 @@ return {
     window = {
       position = "right",
       width = 30,
+      -- Ensure floating is disabled
+      popup = {
+        enabled = false,
+      },
       mappings = {
         ["Y"] = "none",
       },
