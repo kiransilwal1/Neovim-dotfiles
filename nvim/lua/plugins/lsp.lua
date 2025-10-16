@@ -99,7 +99,7 @@ return {
         --   filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
         -- },
         html = {
-          filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue", "php" },
+          filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
         },
         lua_ls = {
           -- enabled = false,

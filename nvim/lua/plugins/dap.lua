@@ -188,6 +188,26 @@ return {
       {
         type = "php",
         request = "launch",
+        name = "Listen for Quotes Project",
+        port = 9003,
+        pathMappings = {
+          ["/var/www/html"] = "/Users/kiransilwal/PHP/quotes", -- container path -> local path
+        },
+        idekey = "neovim",
+      },
+      {
+        type = "php",
+        request = "launch",
+        name = "Listen for ABK Supplies",
+        stopOnEntry = true,
+        port = 9003,
+        pathMappings = {
+          ["/var/www/html"] = "/Users/kiransilwal/PHP/abk-supplies",
+        },
+      },
+      {
+        type = "php",
+        request = "launch",
         name = "Individual debugging",
         port = "9003",
         -- pathMappings = {
@@ -216,6 +236,38 @@ return {
           cwd = "${workspaceFolder}",
           runtimeExecutable = "node",
           sourceMaps = true,
+        },
+        {
+          name = "Debug Vite Client",
+          type = "chrome",
+          request = "launch",
+          url = "http://localhost:3000",
+          webRoot = "${workspaceFolder}/client",
+          skipFiles = { "<node_internals>/**", "node_modules/**" },
+          sourceMaps = true,
+          sourceMapPathOverrides = {
+            ["webpack:///./src/*"] = "${webRoot}/src/*",
+            ["/./*"] = "${webRoot}/*",
+            ["/src/*"] = "${webRoot}/src/*",
+            ["/*"] = "*",
+            ["/./~/*"] = "${webRoot}/node_modules/*",
+          },
+        },
+
+        {
+          type = "pwa-node",
+          request = "launch",
+          name = "Launch Remix Dev Server",
+          program = "${workspaceFolder}/node_modules/.bin/remix",
+          args = { "dev" },
+          cwd = "${workspaceFolder}",
+          env = {
+            NODE_ENV = "development",
+          },
+          sourceMaps = true,
+          protocol = "inspector",
+          console = "integratedTerminal",
+          internalConsoleOptions = "neverOpen",
         },
         {
           type = "pwa-node",

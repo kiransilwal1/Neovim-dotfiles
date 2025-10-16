@@ -1,0 +1,46 @@
+(defsrc
+esc            f1   f2   f3   f4             f5    f6    f7    f8          f9   f10  f11   f12
+grv       1      2    3      4      5       6     7      8     9      0       -      =    bspc        
+tab       q      w    e      r      t       y     u      i     o      p       [      ]       \        
+caps      a      s    d      f      g       h     j      k     l      ;       '          enter        
+lsft      z      x    c      v      b       n     m      ,     .      /                   rsft           up 
+lctl      lmet   lalt             spc                  ralt        rmet                   rctl      lft down rght
+)
+
+(deflayer default
+esc           f1   f2   f3   f4               f5    f6    f7    f8          f9   f10  f11   f12
+grv       1      2    3      4       5       6     7      8     9      0       -      =     bspc       
+tab       q      w    e      r       t       y     u      i     o      p       [      ]        \          
+@vimtap      a      @optionmods    @shiftmodd      @ctrlmodf       g       h     @ctrlmodj      @shiftmodk     @optionmodl      ;       '           enter        
+lsft      z      x    c      v       b       n     m      ,     .      /                    rsft               up
+lctl      lmet   lalt             spc                  ralt        rmet                     rctl          lft down rght
+)
+
+(deflayer vimnav
+XX                XX    XX      XX      XX               XX      XX     XX      XX          XX    XX    XX    XX
+XX       XX      XX    XX      (multi lmet lft)      XX       XX     XX      XX     XX      (multi lmet rght)      XX      XX    XX       
+XX       XX      (multi lalt rght)    XX      XX      XX       @cpy     pgup      XX     XX      @pst      XX      XX    XX          
+@defaulttap       XX      XX    pgdn      XX      XX       lft     down      up    rght      XX      XX           XX        
+XX       XX      XX    XX      lsft      @cdeleteb       XX     XX      XX     XX   (multi lmet f)                  XX         XX
+lctl       XX      XX             XX                                         XX      XX           XX       XX XX XX
+)
+
+(defalias vimmode (layer-switch vimnav))
+(defalias defaultmode (layer-switch default))
+
+(defalias
+  vimtap (tap-dance 200 (lctl @vimmode ))
+)
+
+(defalias
+  defaulttap (tap-dance 200 (lctl @defaultmode ))
+  cpy M-c
+  pst M-S-v
+  ctrlmodf (tap-hold 200 200 f lctl)
+  ctrlmodj (tap-hold 200 200 j rctl)
+  optionmods (tap-hold 200 200 s lalt)
+  optionmodl (tap-hold 200 200 l ralt)
+  shiftmodd (tap-hold 200 200 d lsft)
+  shiftmodk (tap-hold 200 200 k rsft)
+  cdeleteb (tap-hold 200 200 (multi lalt lft) (multi lalt bspc))
+)
